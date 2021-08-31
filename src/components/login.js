@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-const Login = ({}) => {
+const Login = () => {
 
     const [show, setShow] = useState(null);
 
@@ -74,9 +74,8 @@ const Login = ({}) => {
         .then(function(result){
             if(result){
                 setLogin(result.user.email);
-                console.log(result);
-
                 setUser(true)
+                notify()
                 history.push('/Inicio')
             }
         })

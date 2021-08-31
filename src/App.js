@@ -4,10 +4,7 @@ import { AuthProvider } from './hook/auth';
 import Rotas from  './routes'
 
 
-
 function App() {
-
-  
   
   return (
         <BrowserRouter>
@@ -21,9 +18,3 @@ function App() {
 
 export default App;
 
-
-/*{user? 
-  <Login/>
-    :  
-  <Cadastro/>
-}*/

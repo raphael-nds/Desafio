@@ -4,11 +4,8 @@ import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import ShareIcon from "@material-ui/icons/Share";
 import DeleteIcon from '@material-ui/icons/Delete';
 import {React, useState} from 'react';
-import { DeleteData } from '../firebaseDados';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,16 +39,12 @@ const useStyles = makeStyles((theme) => ({
  export default function DadosFirebase({dadosCard, onDelete}) {
     const classes = useStyles();
 
-    const [currentId, setCurrentId] = useState("");
-
     const [expanded, setExpanded] = useState(false);
-
 
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
 
-    console.log('dados do card', dadosCard)
 
     return (
       
@@ -85,21 +78,25 @@ const useStyles = makeStyles((theme) => ({
 
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                   <CardContent align="left">
-                          <Typography variant="body1">
-                            Rua:  {dadosCard.lograouro}
-                          </Typography>
-                          <Typography variant="body1">
-                             Cidade: {dadosCard.cidade}
-                          </Typography>
-                          <Typography variant="body1">
-                             Número: {dadosCard.numero}
-                          </Typography>
-                          <Typography variant="body1">
-                            Bairro:  {dadosCard.bairro}
-                          </Typography>
-                          <Typography variant="body1">
-                             Estado: {dadosCard.uf}
-                          </Typography>
+                      <Typography variant="body1">
+                        Rua:  {dadosCard.logradouro}
+                      </Typography>
+
+                      <Typography variant="body1">
+                          Cidade: {dadosCard.localidade}
+                      </Typography>
+
+                      <Typography variant="body1">
+                          Número: {dadosCard.numero}
+                      </Typography>
+
+                      <Typography variant="body1">
+                        Bairro:  {dadosCard.bairro}
+                      </Typography>
+
+                     <Typography variant="body1">
+                          Estado: {dadosCard.uf}
+                     </Typography>
 
                   </CardContent>
                 </Collapse>
@@ -107,5 +104,3 @@ const useStyles = makeStyles((theme) => ({
         );
 }    
 
-
-//<button onClick={onDelete}>deletar</button>

@@ -3,20 +3,16 @@ import { ContainerList } from '../styled/styled-cardLista';
 import PinDropIcon from '@material-ui/icons/PinDrop';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteIcon from '@material-ui/icons/Delete';
-import fireDb from '../firebase'
 import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    TableCaption,
   } from "@chakra-ui/react"
-import DadosFirebase from './dadosFirebase';
 
-const ListaEnd = ({dadosCard}) => {
+const ListaEnd = ({dadosCard, registeresAddress}) => {
 
 
     function marcarMap() {
@@ -27,7 +23,7 @@ const ListaEnd = ({dadosCard}) => {
         alert("marcado nos favoritos")
     }
 
-    function deletarEnd(index){
+    function deletarEnd(){
         alert("deletado")
         
     }
@@ -38,6 +34,7 @@ const ListaEnd = ({dadosCard}) => {
             <Table className="tabela">
                 <Thead>
                     <Tr>
+                        <Th>CEP</Th>
                         <Th>Logradouro</Th>
                         <Th>Número</Th>
                         <Th>Bairro</Th>
@@ -47,18 +44,22 @@ const ListaEnd = ({dadosCard}) => {
                     </Tr>      
                 </Thead>
                 <Tbody>
-                        <Tr>
-                            <Td>Logradouro</Td>
-                            <Td>Número</Td>
-                            <Td>Bairro</Td>
-                            <Td>Cidade</Td>
-                            <Td>Estado</Td>
+                  {registeresAddress.map((address, index) => (
+                        <Tr key={index}>
+                            <Td>{address.cep}</Td>
+                            <Td>{address.logradouro}</Td>
+                            <Td>{address.numero}</Td>
+                            <Td>{address.bairro}</Td>
+                            <Td>{address.localidade}</Td>
+                            <Td>{address.uf}</Td>
                             <Td>
                                 <PinDropIcon onClick={() => marcarMap()}/>
                                 <FavoriteIcon onClick={() => marcarFavorito()}/>
                                 <DeleteIcon onClick={() => deletarEnd()}/>
                             </Td>
-                        </Tr> 
+                        </Tr>
+                    ))
+                    }
                 </Tbody>
             </Table>
         </ContainerList>       
@@ -67,18 +68,3 @@ const ListaEnd = ({dadosCard}) => {
 }
 
 export default ListaEnd;
-
-
-/*
- <Tr key={id}>
-                                <Td>Logradouro</Td>
-                                <Td>Número</Td>
-                                <Td>Bairro</Td>
-                                <Td>Cidade</Td>
-                                <Td>Estado</Td>
-                                <Td>
-                                    <PinDropIcon onClick={() => marcarMap()}/>
-                                    <FavoriteIcon onClick={() => marcarFavorito()}/>
-                                    <DeleteIcon onClick={() => deletarEnd(id)}/>
-                                </Td>
-                            </Tr>*/

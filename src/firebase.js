@@ -23,17 +23,5 @@ const db = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
 
-/*export default {
-  googlelogin: async () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      
-      let resultado = await firebase.auth().signInWithPopup(provider);
-
-      return resultado;
-
-      
-  }
-}*/
-
 export {auth, provider};
 export default db;

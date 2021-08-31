@@ -17,7 +17,6 @@ import fireDb from '../firebase'
 
 
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: '90%',
@@ -53,23 +52,6 @@ export default function RecipeReviewCard({recuperarEndLocFirebase}) {
     setExpanded(!expanded);
   };
 
-/*
-  let [dadosEnde, setDadosEnde] = useState({});
-  const [currentId, setCurrentId] = useState("");
-*/
-
-/*
-  useEffect(() => {
-   fireDb.child("endereco").on("value", (dbPhoto) => {
-     if(dbPhoto.val() != null){
-       setDadosEnde({
-         ...dbPhoto.val(),
-       });
-     } else {
-     }
-   });
-  }, []);
-*/
   
   return (
     <ContainerCard>

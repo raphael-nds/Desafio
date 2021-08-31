@@ -11,14 +11,13 @@ export const ContainerList = styled.div`
     table{
         border-collapse: collapse;
         width: 100%;
-        margin: auto;
+        margin-bottom:50px;
 
         td, th {
             border: 1px solid #dddddd;
             text-align: left;
             padding: 8px;
-            display: flex;
-        flex-wrap: wrap;
+            
         }
     }
     

@@ -25,16 +25,19 @@ const  Cadastro = () => {
             draggable: true,
             progress: undefined,
             });
-        toast.error('Senha não confere', {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            });
     };
+
+    const error = () => {
+        toast.error('Senha não confere', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    }
 
     const dadosViaCep = (res) => {
         for(const campo in res){
@@ -65,24 +68,21 @@ const  Cadastro = () => {
                 setUser(true)
 
             history.push('/Inicio')
-                notify(toast.sucess)
+                notify()
                 
             })
             .catch((error)=>{
-               notify(toast.error)
+               error()
             })
         }else{
-            
-        }
-        
-        
-
-        
+           
+        }        
     }
 
     function onbluerCep(e) {
        
         const cep = e.target.value?.replace(/[^0-9]/g, '');
+
         const op = {
             method: 'GET',
             mode: 'cors',
@@ -208,5 +208,3 @@ const  Cadastro = () => {
 
 
 export default Cadastro;
-
-

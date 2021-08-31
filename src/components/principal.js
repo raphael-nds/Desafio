@@ -10,14 +10,12 @@ import DadosFirebase from './dadosFirebase';
 import CadastroNovoEnd from './cadastroNovoEnd';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
-import db, { auth } from '../firebase';
+import { auth } from '../firebase';
 import { useAuth } from '../hook/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ModalListaEnd from '../modal/listaEnd';
-import listaEnd from './listaEnd';
 import ListaEnd from './listaEnd';
-import fireDb from '../firebase'
 
 
 
@@ -31,16 +29,23 @@ const Principal = () => {
 
     const [loading, setLoading] = useState(true);
 
-    let [dadosEnde, setDadosEnde] = useState({})
-
     const { user, setUser } = useAuth()
-
-    let [atualizarEnd, setAtualizarEnd] = useState([]);
 
     let [Fetched, setFetched] = useState(false);
 
     const history = useHistory();
 
+    const warn = () => {
+            toast.warn ('Logout efetuado com sucesso', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
     const notify = () => {
         toast.success('Carregando endereços !', {
             position: "top-center",
@@ -51,160 +56,58 @@ const Principal = () => {
             draggable: true,
             progress: undefined,
             });
-    };
-
-    /*const dadosViaCep = (res) => {
-        for(const campo in res){
-            if(document.querySelector("#"+campo)){
-                document.querySelector("#"+campo).value = res[campo];
-            } 
-        }
-    }*/
-  
-    /*function onbluerCep(e) {
-        const cep = e.target.value?.replace(/[^0-9]/g, '');
-        const op = {
-            method: 'GET',
-            mode: 'cors',
-            cache: 'default'
-        }
-  
-        if (cep?.length !== 8){
-            return;
-        }
         
-        fetch(`https://viacep.com.br/ws/${cep}/json/`, op)
-        .then(res => {res.json()
-            .then(data => dadosViaCep(data))
-        })
-        .catch(e => console.log("Deu erro" ))
-    }
-
-     let [values, setValues] = useState(localizacaoItem);
-
- //capturar valor do input
-    const handleInputChange = (e) => {
-        let { name, value} = e.target;
-        console.log("name", name, "value", value);
-
-        setValues({
-            ...values,
-            [name]: value,
-        });
     };
 
-
-     const cadastrarLoc = (e) => {
-       e.preventDefault();      
-      addEndLocFirebase(values);
-      alert("Endereço cadastrado com sucesso!");
-      console.log("dados: -", values);
-
-        //resetar campos
-      setValues({
-        logradouro: '',
-        numero: '',
-        cep: '',
-        localidade: '',
-        bairro: '',
-        uf: ''
-      });
-
-*/
-    //campos iniciais dos dados
-    /*const localizacaoItem = {
-        logradouro: '',
-        numero: '',
-        cep: '',
-        localidade: '',
-        bairro: '',
-        uf: ''
-    };*/
- 
- 
-    
-      /*
-      addEdit(values) 
-      let logradouro = document.getElementById("logradouro").value;
-       alert(logradouro);
-       let numero = document.getElementById("numero").value;
-       let cep = document.getElementById("cep").value;
-       let localidade = document.getElementById("localidade").value;
-       let bairro = document.getElementById("bairro").value;
-       let uf = document.getElementById("uf").value;
-
- */
-
-    const onDeleteAddress = async() => {
-       /* const arrayAux = [...registeresAddress]
-        arrayAux.splice(id)
-        const filter = arrayAux.filter(item => item.id !== id)
-
-        setRegisteresAddress(arrayAux)*/
+    // deletar dados no firebase
+    const onDeleteAddress = async(index) => {
         
         if(window.confirm("Você tem certeza que deseja deletar ?")){
-            const delll = await DeleteData();
-            console.log("del", delll)
-           }
+           await DeleteData(index);
            
+           const arrayAux = [...registeresAddress]
+
+           const filter = arrayAux.filter(item => item.id !== index)
+   
+           setRegisteresAddress(filter)
+           } 
                         
         }
     
 
-
+        //recuperar dados cadastrados no firebase
     const handleData = async() => {
         const dados = await recuperarEndLocFirebase()
-
-        console.log('dados', dados)
 
         setRegisteresAddress(dados)
         setFetched(true);
         setLoading(false)
+
     }
 
-     
+     // verificar dados ao iniciar
      useEffect(() => {
         handleData()
         loading && notify()
      }, [])
 
-     console.log('enderecos', registeresAddress)
-
-     /*const addEdit = obj => {
-        fireDb.child('enderecos').push( obj, (err) =>{
-            if(err){
-                console.log(err);
-            }
-        });
-        history.push("/Inicio");
-     };
- */
-
+     // acessar enderecos
+     const onAddAddress = () => {
+         handleData()
+         
+     }
     
 
+     // deslogar conta
      function logout(e) {
         e.preventDefault();
         auth.signOut()
             .then(function(val){
-                alert("deslogado")
+                warn()
                 setUser(null);
                 window.location.href = "/";
             })
      }
-
- /*
-  useEffect(() => {
-   fireDb.child("endereco").on("value", (dbPhoto) => {
-     if(dbPhoto.val() != null){
-       setDadosEnde({
-         ...dbPhoto.val(),
-         
-       });
-     } else {
-     }
-   });
-  }, []);
- */
 
 
     return (
@@ -237,7 +140,7 @@ const Principal = () => {
                             (<ModalListaEnd onClose={() => setModalVisivelLista(false)}>
                             
                                 <ContainerListaEnd>
-                                    <ListaEnd/>
+                                    <ListaEnd  registeresAddress={registeresAddress}/>
                                 </ContainerListaEnd>
                             </ModalListaEnd>)
                         
@@ -249,7 +152,8 @@ const Principal = () => {
                             (<ModalCadEnd onClose={() => setModalVisivel(false)}>
                             
                                 <ContainerAddLoc>
-                                    <CadastroNovoEnd/>
+                                    <CadastroNovoEnd onAddAddress={() => onAddAddress()}
+                                                    onClose={() => setModalVisivel(false)}/>
                                 </ContainerAddLoc>
                             </ModalCadEnd>)
                         
@@ -274,8 +178,9 @@ const Principal = () => {
                                 {
                                     (!loading && registeresAddress.length > 0)  && (
                                         registeresAddress.map((address, index) => (
-                                             <DadosFirebase key={index} dadosCard={address} onDelete={(index) => onDeleteAddress(index)}/>
-                                            // <div>{address.uf}</div>
+                                             <DadosFirebase key={index} dadosCard={address} onDelete={(index) => 
+                                                {onDeleteAddress(address.id)}}/>
+                                            
                                         ))
                                     )
                                 }
@@ -294,39 +199,8 @@ const Principal = () => {
             
             </ContainerSA>
 
-
-            {/* <RecipeReviewCard/> */}
-
         </ContainerWrapper>
     )
 }
 
 export default Principal;
-
-//modal cadastrar
-/* <div className="menuConfig">
-                    <div className="buscarCep">
-                        <input 
-                            id="buscarCepId"
-                            type="text" 
-                            placeholder="Buscar CEP"
-                        />
-                        <SearchIcon/>   
-                    </div>
-
-                    <div className="iconsConfig">
-                     <AddLocationIcon style={{color: "black"}}  onClick={() => setModalVisivel(true)}/>
-                    {
-                        (modalVisivel) &&
-
-                        (<ModalCadEnd onClose={() => setModalVisivel(false)}>
-                        
-                            <ContainerAddLoc>
-                                <CadastroNovoEnd/>
-                            </ContainerAddLoc>
-                        </ModalCadEnd>)
-                    
-                    }
-                    </div>
-                </div>
-                */
